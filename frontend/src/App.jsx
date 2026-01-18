@@ -256,6 +256,10 @@ function App() {
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                             <p className="text-[9px] text-stone-600 font-bold uppercase tracking-tighter">Educational & Research Edition</p>
                         </div>
+                        <div className="mt-4 flex items-center gap-2 bg-stone-100/50 px-3 py-1.5 rounded-lg border border-stone-200/50">
+                            <div className="w-1 h-1 rounded-full bg-stone-400" />
+                            <p className="text-[8px] text-stone-500 font-bold uppercase">Pipeline Checkpoint: V1.0.1-STABLE</p>
+                        </div>
                     </div>
                 </div>
             </aside>
