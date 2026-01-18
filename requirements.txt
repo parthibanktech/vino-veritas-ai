@@ -8,3 +8,6 @@ scipy
 pydantic
 pytest
 httpx
+matplotlib
+seaborn
+python-multipart
