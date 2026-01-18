@@ -12,9 +12,9 @@ venv/
 .env
 .pytest_cache/
 
-# Data components
-scaler.joblib
-wine_model.joblib
+# Data components (Moved to tracking for Docker/Render builds)
+# scaler.joblib
+# wine_model.joblib
 
 # OS Files
 .DS_Store
