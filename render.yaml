@@ -1,0 +1,35 @@
+# Render Infrastructure-as-Code Configuration
+# This file defines the cloud resources needed for the Vino Veritas application.
+
+services:
+  # --- Backend API Service ---
+  - type: web
+    name: vino-veritas-api
+    env: python
+    region: oregon
+    plan: free # Use the free tier for development
+    # buildCommand: The command Render runs to install requirements
+    buildCommand: pip install -r requirements.txt
+    # startCommand: The command used to launch the FastAPI server
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9 # Pinning the version ensures consistency across environments
+
+  # --- Frontend Static Site Service ---
+  - type: static
+    name: vino-veritas-frontend
+    env: static
+    region: oregon
+    plan: free
+    # buildCommand: Navigates to frontend folder, installs node modules, and creates the dist/ folder
+    buildCommand: cd frontend && npm install && npm run build
+    # publishPath: The subdirectory that Render will serve to the public
+    publishPath: frontend/dist
+    envVars:
+      # Automatically link the frontend to the backend service's URL
+      - key: VITE_API_BASE_URL
+        fromService:
+          name: vino-veritas-api
+          type: web
+          property: host

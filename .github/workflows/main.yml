@@ -1,0 +1,94 @@
+# Vino Veritas CI/CD Pipeline
+# This workflow automates testing, linting, and deployment for the Wine Quality AI project.
+# It runs on every push and pull request to the main/master branches.
+
+name: Vino Veritas CI/CD
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  # job 1: Backend Continuous Integration
+  backend-ci:
+    name: Backend Linting & Testing
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the code from GitHub to the runner
+      - uses: actions/checkout@v3
+      
+      # Step 2: Set up the Python environment (matching production version)
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          
+      # Step 3: Install all required Python packages for the API and testing
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      # Step 4: Execute our automated test suite using pytest
+      - name: Run Backend Tests
+        run: |
+          pytest tests/
+          
+      # Step 5: Static code analysis to ensure best practices and catch syntax errors
+      - name: Lint with flake8
+        run: |
+          pip install flake8
+          # E9, F63, F7, F82 checks for logic/syntax errors that would cause crashes
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Additional check for complexity and line length (exit-zero means it won't fail the build)
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+  # job 2: Frontend Continuous Integration
+  frontend-ci:
+    name: Frontend Auditing & Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      # Step 1: Checkout the code
+      - uses: actions/checkout@v3
+      
+      # Step 2: Set up Node.js for the React application
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'  # Cache npm dependencies for faster subsequent runs
+          cache-dependency-path: frontend/package.json
+          
+      # Step 3: Clean install of frontend dependencies
+      - name: Install dependencies
+        run: npm install
+        
+      # Step 4: Verify the project compiles correctly into a production bundle
+      - name: Build Frontend
+        run: npm run build
+        
+      # Step 5: Check for known security vulnerabilities in third-party libraries
+      - name: Security Audit
+        run: npm audit --audit-level=high
+
+  # job 3: Continuous Deployment (Runs only after CI passes on main branch)
+  deploy:
+    name: Deployment to Render
+    needs: [backend-ci, frontend-ci] # Ensures deployment only happens if tests pass
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      # Final Step: Trigger Render's deployment webhook
+      - name: Trigger Render Deploy
+        run: |
+          if [ -n "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
+            curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          else
+            echo "RENDER_DEPLOY_HOOK_URL not set. Skipping manual trigger."
+            echo "Note: If Render has 'Auto-Deploy' enabled, it will deploy via the GitHub push regardless."
+          fi
