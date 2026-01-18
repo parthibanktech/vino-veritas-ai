@@ -43,16 +43,16 @@ First, I'll import the pandas library to work with DataFrames. Then, I'll load t
 
 import pandas as pd
 
-df = pd.read_csv('/content/sample_data/winequality-red_par.csv')
+df = pd.read_csv('winequality-red_par.csv')
 
 print("First 5 rows of the DataFrame:")
-display(df.head())
+print(df.head())
 
 print("\nConcise summary of the DataFrame (data types, non-null values, memory usage):")
 df.info()
 
 print("\nDescriptive statistics of the DataFrame:")
-display(df.describe())
+print(df.describe())
 
 print(df.count())
 
@@ -157,10 +157,10 @@ scaler = StandardScaler()
 df[numerical_features] = scaler.fit_transform(df[numerical_features])
 
 print("DataFrame after scaling numerical features:")
-display(df.head())
+print(df.head())
 
 print("\nDescriptive statistics after scaling:")
-display(df.describe())
+print(df.describe())
 
 """## Model Selection and Training
 
@@ -219,7 +219,7 @@ features_df = features_df.sort_values(by='Importance', ascending=False)
 
 # Display the sorted feature importances
 print("Feature Importances:")
-display(features_df)
+print(features_df)
 
 # Plot feature importances
 plt.figure(figsize=(12, 7))
