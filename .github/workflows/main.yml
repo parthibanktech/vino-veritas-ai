@@ -1,6 +1,8 @@
-# Vino Veritas CI/CD Pipeline
-# This workflow automates testing, linting, and deployment for the Wine Quality AI project.
-# It runs on every push and pull request to the main/master branches.
+# --- CONTEXT-AWARE AUTOMATION ---
+# This workflow is "Zero-Configuration". It does NOT need your GitHub username or Repo name hardcoded.
+# 1. 'actions/checkout' automatically detects the repository it is running in.
+# 2. 'github.ref' automatically knows which branch (main/master) triggered the run.
+# 3. This makes the code 100% portable; you can rename your repo and this will still work.
 
 name: Vino Veritas CI/CD
 
@@ -76,15 +78,26 @@ jobs:
       - name: Security Audit
         run: npm audit --audit-level=high
 
-  # job 3: Continuous Deployment (CD)
+  # job 3: Docker Build Validation (Pre-Flight Check)
+  # Since we use a Unified Docker Container, we MUST verify it builds correctly.
+  # This catches missing files, dependency conflicts, or build-time script errors.
+  docker-ci:
+    name: Container Build Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Test Image
+        run: docker build -t vino-veritas-test:latest .
+
+  # job 4: Continuous Deployment (CD)
   # This job handles the automated hand-off to the production environment.
   # SECURITY & CREDENTIALS:
   # 1. We use a GitHub Repository Secret named 'RENDER_DEPLOY_HOOK_URL'.
   # 2. This URL is a private webhook provided by Render that excludes the need for login/password in Git.
-  # 3. If the CI pass (jobs 1 & 2), we 'curl' this secret URL to tell Render to pull the fresh code.
+  # 3. If the CI pass (jobs 1, 2 & 3), we 'curl' this secret URL to tell Render to pull the fresh code.
   deploy:
     name: Automated Production Hand-off
-    needs: [backend-ci, frontend-ci] # Ensures deployment ONLY happens if tests pass
+    needs: [backend-ci, frontend-ci, docker-ci] # Ensures deployment ONLY happens if ALL checks pass
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
