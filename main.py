@@ -53,9 +53,6 @@ class WineFeatures(BaseModel):
     sulphates: float
     alcohol: float
 
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to Vino Veritas Wine Quality API"}
 
 @app.post("/predict")
 def predict_quality(features: WineFeatures):
