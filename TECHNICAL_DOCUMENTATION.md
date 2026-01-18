@@ -1,6 +1,7 @@
 # 🍷 Vino Veritas AI: Technical Architecture
 
-This document outlines the dual-engine architecture of the Vino Veritas Wine Quality Dashboard, explaining how Python and React collaborate to provide high-fidelity enological insights.
+**Developed by:** Parthiban  
+**Mission:** This dashboard is an **Educational and Research Prototype** designed to demonstrate the convergence of Enology (Wine Science) and Artificial Intelligence. It showcases how a modern full-stack architecture can be leveraged to translate complex chemical datasets into actionable business and scientific insights.
 
 ---
 

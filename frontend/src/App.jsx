@@ -239,13 +239,23 @@ function App() {
                 </div>
 
                 <div className="p-8">
-                    <div className="hidden md:block glass p-6 rounded-2xl relative overflow-hidden group border border-stone-200 bg-stone-50">
+                    <div className="hidden md:block glass p-6 rounded-2xl relative overflow-hidden group border border-stone-200 bg-stone-50 mb-4">
                         <div className="absolute top-0 right-0 w-16 h-16 wine-gradient opacity-5 blur-2xl rounded-full" />
                         <p className="text-stone-900 font-bold text-xs mb-2 flex items-center gap-2">
                             <Sparkles size={14} className="text-red-600" />
                             Expert Instance
                         </p>
                         <p className="text-[10px] text-stone-700 font-bold leading-relaxed">System calibrated with {batchResults.length || 1599} batch cycles.</p>
+                    </div>
+
+                    {/* Educational Credit */}
+                    <div className="mt-8 border-t border-stone-200 pt-6">
+                        <p className="text-[10px] uppercase tracking-widest text-stone-500 font-bold mb-2">Developed By</p>
+                        <p className="text-stone-900 font-bold text-sm mb-1 italic">Parthiban</p>
+                        <div className="flex items-center gap-1.5 opacity-60">
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            <p className="text-[9px] text-stone-600 font-bold uppercase tracking-tighter">Educational & Research Edition</p>
+                        </div>
                     </div>
                 </div>
             </aside>

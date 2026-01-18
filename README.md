@@ -1,6 +1,12 @@
-# 🍷 Vino Veritas | Wine Quality AI
-
 An enterprise AI solution to analyze and predict wine quality based on physicochemical properties.
+
+---
+
+### 👨‍🏫 Project Overview
+**Lead Developer:** Parthiban  
+**Purpose:** This project was created exclusively for **Educational and Enological Research** purposes. It serves as a comprehensive demonstration of integrating Machine Learning with modern Full-Stack Web Architecture and DevOps automation.
+
+---
 
 ## 🚀 Quick Start
 
