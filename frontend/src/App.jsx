@@ -268,6 +268,20 @@ function App() {
                 <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-pink-50/60 rounded-full blur-[100px] pointer-events-none" />
                 <div className="absolute top-[50%] left-[30%] w-[40%] h-[40%] bg-orange-50/30 rounded-full blur-[140px] pointer-events-none" />
 
+                {/* --- Global Educational Header --- */}
+                <div className="relative z-50 px-8 py-6 border-b border-stone-200/60 bg-white/30 backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 className="text-stone-900 font-fraunces text-2xl font-black italic tracking-tight">
+                            Digital Enology Suite <span className="text-red-600">by Parthiban</span>
+                        </h2>
+                    </div>
+                    <div className="bg-red-50/80 border border-red-100 px-6 py-2 rounded-full shadow-sm">
+                        <p className="text-red-900 text-[11px] font-black uppercase tracking-[0.2em]">
+                            ⚠️ Created Exclusively for **Educational & Research Purposes**
+                        </p>
+                    </div>
+                </div>
+
                 {activeTab === 'dashboard' && (
                     <div className="p-8 md:p-12 lg:p-20 max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700">
                         <header className="mb-16 border-l-4 border-red-600 pl-8">
