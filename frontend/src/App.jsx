@@ -258,7 +258,7 @@ function App() {
                         </div>
                         <div className="mt-4 flex items-center gap-2 bg-stone-100/50 px-3 py-1.5 rounded-lg border border-stone-200/50">
                             <div className="w-1 h-1 rounded-full bg-stone-400" />
-                            <p className="text-[8px] text-stone-500 font-bold uppercase">Pipeline Checkpoint: V1.0.1-STABLE</p>
+                            <p className="text-[8px] text-stone-500 font-bold uppercase">Pipeline Checkpoint: V1.0.4-STABLE</p>
                         </div>
                     </div>
                 </div>
@@ -266,6 +266,11 @@ function App() {
 
             {/* --- Main Content --- */}
             <main className="flex-1 ml-24 md:ml-72 bg-white/50 backdrop-blur-xl min-h-screen relative overflow-hidden">
+                {/* Visual Build ID for Deployment Verification */}
+                <div className="absolute top-0 right-0 z-[100] px-4 py-1 bg-stone-900 text-white text-[8px] font-black uppercase tracking-[0.3em] rounded-bl-xl shadow-2xl flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    BUILD-ID: 04FEF86-STABLE | LIVE SYSTEM
+                </div>
                 {/* Background Luxurious Mesh Gradients */}
                 <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-red-100/40 rounded-full blur-[120px] animate-pulse pointer-events-none" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-stone-200/50 rounded-full blur-[150px] pointer-events-none" />
