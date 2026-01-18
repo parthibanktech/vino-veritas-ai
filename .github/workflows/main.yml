@@ -76,19 +76,25 @@ jobs:
       - name: Security Audit
         run: npm audit --audit-level=high
 
-  # job 3: Continuous Deployment (Runs only after CI passes on main branch)
+  # job 3: Continuous Deployment (CD)
+  # This job handles the automated hand-off to the production environment.
+  # SECURITY & CREDENTIALS:
+  # 1. We use a GitHub Repository Secret named 'RENDER_DEPLOY_HOOK_URL'.
+  # 2. This URL is a private webhook provided by Render that excludes the need for login/password in Git.
+  # 3. If the CI pass (jobs 1 & 2), we 'curl' this secret URL to tell Render to pull the fresh code.
   deploy:
-    name: Deployment to Render
-    needs: [backend-ci, frontend-ci] # Ensures deployment only happens if tests pass
+    name: Automated Production Hand-off
+    needs: [backend-ci, frontend-ci] # Ensures deployment ONLY happens if tests pass
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
-      # Final Step: Trigger Render's deployment webhook
-      - name: Trigger Render Deploy
+      - name: Trigger Render Automated Build
+        # This step uses the secret stored in your GitHub Repo Settings
         run: |
           if [ -n "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
+            echo "🚀 CI passed. Triggering production deployment via Render Webhook..."
             curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
           else
-            echo "RENDER_DEPLOY_HOOK_URL not set. Skipping manual trigger."
-            echo "Note: If Render has 'Auto-Deploy' enabled, it will deploy via the GitHub push regardless."
+            echo "⚠️ RENDER_DEPLOY_HOOK_URL is missing in GitHub Secrets."
+            echo "Manual deployment or Render Auto-Deploy will be required."
           fi
