@@ -55,14 +55,29 @@ Our **Vino Veritas CI/CD** pipeline (`.github/workflows/main.yml`) is the guardi
 2.  **Security Audit:** Executes `npm audit` on the frontend to protect against third-party vulnerabilities.
 3.  **Build Verification:** Confirms that the production bundle compiles without errors before any deployment occurs.
 
-### ⚡ Enabling Auto-Delivery:
-1.  Copy the **Deploy Hook URL** from the Render settings page.
-2.  Add it as a **GitHub Secret** named `RENDER_DEPLOY_HOOK_URL`.
-3.  **Result:** Every successfull merge into `main` will automatically trigger a production update.
+### ⚡ Enabling Auto-Delivery (Final Setup):
+To complete the automated bridge between GitHub and Render:
+1.  **Get the Hook**: In your Render Dashboard, select your service, go to **Settings**, and scroll down to the **Deploy Hook** section. Copy the URL provided.
+2.  **Add to GitHub**: Go to your GitHub Repository, click **Settings** (top tab), then **Secrets and variables** > **Actions**.
+3.  **Create Secret**: Click **New repository secret**.
+    *   **Name**: `RENDER_DEPLOY_HOOK_URL`
+    *   **Value**: Paste the URL you copied from Render.
+4.  **Result**: Every successful code check on the `main` branch will now instantly tell Render to update your live site.
 
 ---
 
-## 📝 5. Post-Deployment Checklist
+## 📈 5. Monitoring the Pipeline
+You can watch your CI/CD pipeline work in real-time:
+1.  **Go to GitHub**: Open your repository in your browser.
+2.  **Actions Tab**: Click the **Actions** tab at the top.
+3.  **Status Icons**: 
+    *   **Yellow Spinner (🟡)**: The system is currently testing and building your code.
+    *   **Green Check (✅)**: Your code is healthy and has been sent to production.
+    *   **Red Cross (❌)**: A test failed or a security risk was found. The deployment was automatically blocked to prevent a crash.
+
+---
+
+## 📝 6. Post-Deployment Checklist
 - [ ] **Health Check:** Verify `https://your-app.onrender.com/health` returns `{"status": "healthy"}`.
 - [ ] **Analytics Sync:** Ensure the "Dataset Audit" correctly displays all 1,599 research samples.
 - [ ] **Gallery Check:** Confirm all 300 DPI archival plots are rendering sharply in the "Research Gallery".
