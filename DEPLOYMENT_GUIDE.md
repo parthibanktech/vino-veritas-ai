@@ -31,9 +31,21 @@ The application uses a **Dual-Engine** architecture that requires two separate d
 5.  **Environment Variables:**
     *   `VITE_API_BASE_URL`: The URL of your deployed Render Web Service (e.g., `https://vino-api.onrender.com`).
 
+## 🐳 3. Unified Docker Deployment (Recommended)
+We have provided a professional multi-stage `Dockerfile` that packages both the React UI and the FastAPI backend into a single container. This is the **most robust** way to deploy.
+
+### A. Deploying via Docker on Render
+1.  Click **New +** > **Web Service**.
+2.  Connect your GitHub repository.
+3.  For **Runtime**, select **Docker**.
+4.  Render will automatically detect the `Dockerfile` and build the entire stack.
+5.  **Environment Variables:**
+    *   `PORT`: `8000` (FastAPI is configured to listen here).
+    *   `VITE_API_BASE_URL`: (Optional) Use `/` to point to the same host.
+
 ---
 
-## 🤖 3. GitHub Actions CI/CD
+## 🤖 4. GitHub Actions CI/CD
 We have implemented a professional CI/CD pipeline in `.github/workflows/main.yml`. Here is how it helps automate the deployment:
 
 ### 🔬 **Continuous Integration (CI)**

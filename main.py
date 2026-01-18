@@ -1,9 +1,11 @@
 from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import joblib
 import pandas as pd
 import numpy as np
 import io
+import os
 from scipy.stats import gaussian_kde
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -13,6 +15,10 @@ app = FastAPI(
     description="Backend API for predicting red wine quality and analyzing chemical drivers.",
     version="1.0.0"
 )
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
 
 # Enable CORS (Cross-Origin Resource Sharing)
 app.add_middleware(
@@ -232,6 +238,18 @@ def get_recommendations():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# --- Static and Frontend Assets ---
+# Serve static research plots at /research_plots
+if os.path.exists("static/plots"):
+    app.mount("/research_plots", StaticFiles(directory="static/plots"), name="research_plots")
+
+# Serve the React frontend at /
+# This MUST be mounted last so that it doesn't intercept API routes
+if os.path.exists("frontend/dist"):
+    app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="frontend")
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Use port from environment variable for Render compatibility
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
