@@ -1,77 +1,73 @@
-# 🚀 Deployment & CI/CD Guide: Vino Veritas AI
+# 🍷 Vino Veritas AI: Production Deployment Guide
 
-This guide explains how to deploy the **Vino Veritas AI Dashboard** to production using **Render** and how the **GitHub Actions CI/CD** pipeline automates this process.
-
----
-
-## 🏗️ 1. Production Architecture
-The application uses a **Dual-Engine** architecture that requires two separate deployment types:
-1.  **Backend (API + ML Engine):** Deployed as a **Render Web Service** (Python/FastAPI).
-2.  **Frontend (UI):** Deployed as a **Render Static Site** (React/Vite).
+This guide provides the definitive blueprint for deploying the **Vino Veritas AI Dashboard** to a production environment using **Render**, **Docker**, and **GitHub Actions**.
 
 ---
 
-## ☁️ 2. Deploying to Render
+## 🏛️ 1. Production Architecture
+The application is designed with a **Dual-Engine** architecture, optimized for high-performance data processing and a seamless user experience.
 
-### A. Backend (Web Service)
-1.  Log in to [Render.com](https://render.com).
-2.  Click **New +** > **Web Service**.
-3.  Connect your GitHub repository.
-4.  Select the **Python** environment.
-5.  **Build Command:** `pip install -r requirements.txt`
-6.  **Start Command:** `uvicorn main:app --host 0.0.0.0 --port $PORT`
-7.  **Environment Variables:**
-    *   `PYTHON_VERSION`: `3.11.0`
-
-### B. Frontend (Static Site)
-1.  Click **New +** > **Static Site**.
-2.  Connect your GitHub repository.
-3.  **Build Command:** `npm run build` (This runs in the `frontend` directory).
-4.  **Publish Directory:** `frontend/dist`
-5.  **Environment Variables:**
-    *   `VITE_API_BASE_URL`: The URL of your deployed Render Web Service (e.g., `https://vino-api.onrender.com`).
-
-## 🐳 3. Unified Docker Deployment (Recommended)
-We have provided a professional multi-stage `Dockerfile` that packages both the React UI and the FastAPI backend into a single container. This is the **most robust** way to deploy.
-
-### A. Deploying via Docker on Render
-1.  Click **New +** > **Web Service**.
-2.  Connect your GitHub repository.
-3.  For **Runtime**, select **Docker**.
-4.  Render will automatically detect the `Dockerfile` and build the entire stack.
-5.  **Environment Variables:**
-    *   `PORT`: `8000` (FastAPI is configured to listen here).
-    *   `VITE_API_BASE_URL`: (Optional) Use `/` to point to the same host.
+| Component | Technology | Role |
+| :--- | :--- | :--- |
+| **Backend** | Python 3.11 / FastAPI | ML Inference, Statistical Processing, Archival Storage |
+| **Frontend** | React 18 / Vite | Interactive UI, D3-powered Visualizations, Real-time Analytics |
+| **Deployment** | Docker | Containerized, immutable production environment |
+| **Pipeline** | GitHub Actions | Automated Testing (CI) and One-Click Delivery (CD) |
 
 ---
 
-## 🤖 4. GitHub Actions CI/CD
-We have implemented a professional CI/CD pipeline in `.github/workflows/main.yml`. Here is how it helps automate the deployment:
+## 🐳 2. Unified Deployment (Recommended)
+We use a **Multi-Stage Docker Architecture**. This means a single container serves both the API and the Frontend, ensuring perfect synchronization between the UI and the backend logic.
 
-### 🔬 **Continuous Integration (CI)**
-Every time you `git push` or create a **Pull Request**, GitHub Actions automatically:
-1.  **Backend CI:** 
-    *   Installs Python dependencies.
-    *   Runs the `pytest` suite.
-    *   Lints the code with `flake8` to catch logic errors.
-2.  **Frontend CI:**
-    *   Installs Node.js dependencies.
-    *   Checks for **Security Vulnerabilities** using `npm audit`.
-    *   Verifies that the React build is successful.
-
-### 🚀 **Continuous Deployment (CD)**
-The **Deployment Job** only runs if both the Backend and Frontend CI jobs pass successfully.
-1.  **Validation:** It ensures that "broken code" never reaches production.
-2.  **Automation:** Once tests pass on the `main` branch, the pipeline can trigger Render via a **Deploy Webhook**.
-3.  **Efficiency:** You don't have to manually click "Deploy"—the system handles it upon successful code verification.
+### 🚀 Step-by-Step Render Setup:
+1.  **Connect GitHub:** Create a new **Web Service** on [Render](https://render.com) and link your repository.
+2.  **Runtime Selection:** Choose **Docker** as the environment.
+3.  **Region:** Select a region closest to your primary user base (e.g., US East).
+4.  **Environment Variables:** Add the following keys:
+    *   `PORT`: `8000`
+    *   `VITE_API_BASE_URL`: `/` (Self-referencing for single-container architecture).
+    *   `NODE_ENV`: `production`
 
 ---
 
-## 🔑 4. Enabling Full Automation
-To make the deployment fully hands-free:
-1.  Go to your Render Dashboard > **Deploy Hook**.
-2.  Copy the URL.
-3.  Go to your GitHub Repository > **Settings** > **Secrets and variables** > **Actions**.
-4.  Create a new secret named `RENDER_DEPLOY_HOOK_URL` and paste the link.
+## ☁️ 3. Alternative: Microservice Deployment
+If you prefer to scale the frontend and backend independently, follow this manual path:
 
-From now on, your dashboard will **test itself, build itself, and deploy itself** every time you push to GitHub! 🍷✨
+### A. The Research Engine (Backend)
+*   **Service Type:** Web Service
+*   **Runtime:** Python
+*   **Build Command:** `pip install -r requirements.txt`
+*   **Start Command:** `uvicorn main:app --host 0.0.0.0 --port $PORT`
+
+### B. The Exhibition UI (Frontend)
+*   **Service Type:** Static Site
+*   **Build Command:** `npm run build`
+*   **Publish Directory:** `frontend/dist`
+*   **Environment Variable:** `VITE_API_BASE_URL` (Set to your Backend URL).
+
+---
+
+## 🤖 4. DevOps: The CI/CD Pipeline
+Our **Vino Veritas CI/CD** pipeline (`.github/workflows/main.yml`) is the guardian of your production stability.
+
+### 🛡️ Automated Quality Gates:
+1.  **Backend Integrity:** Runs `pytest` and `flake8` to ensure your ML enology core is mathematically and logically sound.
+2.  **Security Audit:** Executes `npm audit` on the frontend to protect against third-party vulnerabilities.
+3.  **Build Verification:** Confirms that the production bundle compiles without errors before any deployment occurs.
+
+### ⚡ Enabling Auto-Delivery:
+1.  Copy the **Deploy Hook URL** from the Render settings page.
+2.  Add it as a **GitHub Secret** named `RENDER_DEPLOY_HOOK_URL`.
+3.  **Result:** Every successfull merge into `main` will automatically trigger a production update.
+
+---
+
+## 📝 5. Post-Deployment Checklist
+- [ ] **Health Check:** Verify `https://your-app.onrender.com/health` returns `{"status": "healthy"}`.
+- [ ] **Analytics Sync:** Ensure the "Dataset Audit" correctly displays all 1,599 research samples.
+- [ ] **Gallery Check:** Confirm all 300 DPI archival plots are rendering sharply in the "Research Gallery".
+- [ ] **Simulator Logic:** Run a test batch in the "Batch Simulator" to verify ML inference is active.
+
+---
+
+*“In vino veritas, in production high-availability.”* 🍷✨
