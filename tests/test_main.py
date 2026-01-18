@@ -3,10 +3,10 @@ from main import app
 
 client = TestClient(app)
 
-def test_read_root():
-    response = client.get("/")
+def test_health_check():
+    response = client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"message": "Welcome to Vino Veritas Wine Quality API"}
+    assert response.json() == {"status": "healthy"}
 
 def test_get_features():
     response = client.get("/features")
