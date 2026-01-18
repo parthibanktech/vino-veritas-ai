@@ -1,8 +1,8 @@
-# --- CONTEXT-AWARE AUTOMATION ---
-# This workflow is "Zero-Configuration". It does NOT need your GitHub username or Repo name hardcoded.
-# 1. 'actions/checkout' automatically detects the repository it is running in.
-# 2. 'github.ref' automatically knows which branch (main/master) triggered the run.
-# 3. This makes the code 100% portable; you can rename your repo and this will still work.
+# --- CI/CD STRATEGY ---
+# Why do we see "install" commands here if we use Docker?
+# Jobs 1 & 2 are "Fast Feedback" jobs. They run in seconds to catch typos, broken tests, 
+# and security flaws immediately without waiting for a full 5-10 minute Docker build.
+# Job 3 (Docker) then verifies that the final production container is also sound.
 
 name: Vino Veritas CI/CD
 
